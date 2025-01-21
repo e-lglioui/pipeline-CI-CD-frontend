@@ -1,8 +1,25 @@
+import { useEffect, useState } from 'react';
 import { MainLayout } from '../../../components/layout/dashoard/MainLayout';
 import { DashboardHeader } from '../../../components/common/Dashboard/header';
-import { Check, Eye, Trash } from 'lucide-react';
+import { Eye, Trash } from 'lucide-react';
+import { getReviews } from '../../../services/reviewService';
 
 const Reviews = () => {
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const data = await getReviews({ isReported: false });
+        setReviews(data);
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+      }
+    };
+
+    fetchReviews();
+  }, []);
+
   return (
     <MainLayout>
       <DashboardHeader title="Reviews" subtitle="Manage your reviews" />
@@ -34,38 +51,39 @@ const Reviews = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr className="hover:bg-gray-50 dark:hover:bg-meta-3 transition-all">
-                    <td className="border-b border-[#eee] py-5 px-4 xl:pl-6 dark:border-strokedark">
-                      <h5 className="font-medium text-black dark:text-white">
-                        John Doe
-                      </h5>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">5</p>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                      <p className="text-black dark:text-white">Great product!</p>
-                    </td>
-                    <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark text-right">
-                      <div className="flex justify-end items-center gap-2">
-                        <button
-                          title="See Details"
-                          className="flex items-center bg-blue-500 text-white py-2 px-3 rounded-md hover:bg-blue-600 transition-all"
-                        >
-                          <Eye className="w-4 h-4 mr-1" />
-                          See Details
-                        </button>
-                        <button
-                          title="Reject"
-                          className="flex items-center bg-red-500 text-white py-2 px-3 rounded-md hover:bg-red-600 transition-all"
-                        >
-                          <Trash className="w-4 h-4 mr-1" />
-                          Delete comment
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                  {/* Add more rows here */}
+                  {reviews.map((review) => (
+                    <tr key={review.id} className="hover:bg-gray-50 dark:hover:bg-meta-3 transition-all">
+                      <td className="border-b border-[#eee] py-5 px-4 xl:pl-6 dark:border-strokedark">
+                        <h5 className="font-medium text-black dark:text-white">
+                          {review.userId.username}
+                        </h5>
+                      </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p className="text-black dark:text-white">{review.rating}</p>
+                      </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                        <p className="text-black dark:text-white">{review.comment}</p>
+                      </td>
+                      <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark text-right">
+                        <div className="flex justify-end items-center gap-2">
+                          <button
+                            title="See Details"
+                            className="flex items-center bg-blue-500 text-white py-2 px-3 rounded-md hover:bg-blue-600 transition-all"
+                          >
+                            <Eye className="w-4 h-4 mr-1" />
+                            See Details
+                          </button>
+                          <button
+                            title="Reject"
+                            className="flex items-center bg-red-500 text-white py-2 px-3 rounded-md hover:bg-red-600 transition-all"
+                          >
+                            <Trash className="w-4 h-4 mr-1" />
+                            Delete Review
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             </div>
