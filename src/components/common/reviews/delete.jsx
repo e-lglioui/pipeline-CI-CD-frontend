@@ -12,7 +12,7 @@ const DeleteModal = ({ isOpen, onClose, onConfirm, isDeleting }) => {
             <AlertCircle className="h-6 w-6 text-red-600 dark:text-red-500" />
           </div>
           <div>
-            <h2 className="text-xl font-semibold mb-1">Delete Book</h2>
+            <h2 className="text-xl font-semibold mb-1">Delete Review</h2>
             <p className="text-sm text-gray-500 dark:text-gray-400">
               This action cannot be undone.
             </p>
@@ -20,7 +20,7 @@ const DeleteModal = ({ isOpen, onClose, onConfirm, isDeleting }) => {
         </div>
 
         <p className="text-gray-600 text-sm leading-6 dark:text-gray-300 mb-6">
-          Are you sure you want to delete this book? All data associated with it will be permanently removed.
+          Are you sure you want to delete this review? All data associated with it will be permanently removed.
         </p>
 
         <div className="flex justify-end gap-3">
@@ -43,7 +43,7 @@ const DeleteModal = ({ isOpen, onClose, onConfirm, isDeleting }) => {
                 Deleting...
               </>
             ) : (
-              'Delete Book'
+              'Delete Review'
             )}
           </Button>
         </div>

@@ -2,10 +2,15 @@ import { useEffect, useState } from 'react';
 import { MainLayout } from '../../../components/layout/dashoard/MainLayout';
 import { DashboardHeader } from '../../../components/common/Dashboard/header';
 import { Eye, Trash } from 'lucide-react';
-import { getReviews } from '../../../services/reviewService';
+import { getReviews, deleteReview } from '../../../services/reviewService';
+import DeleteModal from '../../../components/common/reviews/delete';
+import { toast } from 'sonner';
 
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
+  const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [selectedReviewId, setSelectedReviewId] = useState(null);
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -19,6 +24,21 @@ const Reviews = () => {
 
     fetchReviews();
   }, []);
+
+  const handleDelete = async () => {
+    setIsDeleting(true);
+    try {
+      await deleteReview(selectedReviewId);
+      setReviews(reviews.filter(review => review._id !== selectedReviewId));
+      setDeleteModalOpen(false);
+      toast.success('Review deleted successfully');
+    } catch (error) {
+      console.error('Error deleting review:', error);
+      toast.error('Failed to delete review');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
 
   return (
     <MainLayout>
@@ -52,7 +72,7 @@ const Reviews = () => {
                 </thead>
                 <tbody>
                   {reviews.map((review) => (
-                    <tr key={review.id} className="hover:bg-gray-50 dark:hover:bg-meta-3 transition-all">
+                    <tr key={review._id} className="hover:bg-gray-50 dark:hover:bg-meta-3 transition-all">
                       <td className="border-b border-[#eee] py-5 px-4 xl:pl-6 dark:border-strokedark">
                         <h5 className="font-medium text-black dark:text-white">
                           {review.userId.username}
@@ -76,6 +96,10 @@ const Reviews = () => {
                           <button
                             title="Reject"
                             className="flex items-center bg-red-500 text-white py-2 px-3 rounded-md hover:bg-red-600 transition-all"
+                            onClick={() => {
+                              setSelectedReviewId(review._id);
+                              setDeleteModalOpen(true);
+                            }}
                           >
                             <Trash className="w-4 h-4 mr-1" />
                             Delete Review
@@ -89,6 +113,14 @@ const Reviews = () => {
             </div>
           </div>
         </div>
+
+        {/* Review delete Modal */}
+        <DeleteModal
+          isOpen={isDeleteModalOpen}
+          onClose={() => setDeleteModalOpen(false)}
+          onConfirm={handleDelete}
+          isDeleting={isDeleting}
+        />
       </div>
     </MainLayout>
   );
