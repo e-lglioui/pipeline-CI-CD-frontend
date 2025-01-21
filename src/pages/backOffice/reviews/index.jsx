@@ -7,20 +7,6 @@ const Reviews = () => {
     <MainLayout>
       <DashboardHeader title="Reviews" subtitle="Manage your reviews" />
       <div className="flex flex-col gap-8 py-6">
-        {/* Search Section */}
-        <div className="bg-white rounded-md shadow-md p-6 dark:bg-boxdark">
-          <form className="flex w-full max-w-md">
-            <input
-              type="text"
-              placeholder="Search for reviews"
-              className="w-full py-3 px-4 border border-stroke rounded-md rounded-r-none border-r-0 overflow-hidden text-black outline-none transition-all focus:border-primary dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary"
-            />
-            <button className="bg-zinc-900 bg-primary py-3 px-6 text-white font-medium transition-all hover:bg-opacity-90 rounded-r-md">
-              Search
-            </button>
-          </form>
-        </div>
-
         {/* Reviews Table */}
         <div className="bg-white rounded-md shadow-md dark:bg-boxdark">
           <div className="border-b border-stroke py-4 px-6 dark:border-strokedark">
