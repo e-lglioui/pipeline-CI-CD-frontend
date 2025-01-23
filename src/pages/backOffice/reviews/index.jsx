@@ -4,13 +4,16 @@ import { DashboardHeader } from '../../../components/common/Dashboard/header';
 import { Eye, Trash } from 'lucide-react';
 import { getReviews, deleteReview } from '../../../services/reviewService';
 import DeleteModal from '../../../components/common/reviews/delete';
+import ReviewDetailsModal from '../../../components/common/reviews/details';
 import { toast } from 'sonner';
 
 const Reviews = () => {
   const [reviews, setReviews] = useState([]);
   const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [isDetailsModalOpen, setDetailsModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [selectedReviewId, setSelectedReviewId] = useState(null);
+  const [selectedReview, setSelectedReview] = useState(null);
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -38,6 +41,11 @@ const Reviews = () => {
     } finally {
       setIsDeleting(false);
     }
+  };
+
+  const handleViewDetails = (review) => {
+    setSelectedReview(review);
+    setDetailsModalOpen(true);
   };
 
   return (
@@ -89,6 +97,7 @@ const Reviews = () => {
                           <button
                             title="See Details"
                             className="flex items-center bg-blue-500 text-white py-2 px-3 rounded-md hover:bg-blue-600 transition-all"
+                            onClick={() => handleViewDetails(review)}
                           >
                             <Eye className="w-4 h-4 mr-1" />
                             See Details
@@ -120,6 +129,13 @@ const Reviews = () => {
           onClose={() => setDeleteModalOpen(false)}
           onConfirm={handleDelete}
           isDeleting={isDeleting}
+        />
+
+        {/* Review details Modal */}
+        <ReviewDetailsModal
+          isOpen={isDetailsModalOpen}
+          onClose={() => setDetailsModalOpen(false)}
+          review={selectedReview}
         />
       </div>
     </MainLayout>
