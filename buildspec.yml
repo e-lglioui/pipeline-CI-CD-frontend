@@ -3,18 +3,19 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 16
-  pre_build:
+      nodejs: 18
     commands:
-      - npm install
+      - echo "Installing dependencies using node 18"
+      - npm ci 
+      - echo "Done installing dependencies ====>"
   build:
     commands:
+      - echo "Building the React Project"
       - npm run build
-  post_build:
-    commands:
-      - aws s3 sync build/ s3://votre-bucket-s3/
+      - echo "Done building the project ==> Exporting artifcats"
 
 artifacts:
   files:
     - '**/*'
-  base-directory: 'build'
+  discard-paths: no
+  base-directory: dist
